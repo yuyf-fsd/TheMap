@@ -1,8 +1,6 @@
 <template>
 <el-row>
-  <h2>Simple map</h2>
-    <p>Marker is placed at {{ marker }}</p>
-    <p>Marker icon are retrived from {{ path }} custom path</p>
+  <p><strong>Leaflet Map<Strong></p>
   <el-card >
     <div id="top_div">
       <v-map :zoom="zoom" :center="center">
@@ -12,18 +10,22 @@
       </v-map>
     </div>
   </el-card>
-  <p>Action markers</p>
+  <p>Markers related action</p>
   <div style="height: 50">
     <button name="button" v-on:click="addMarkers">Add Markers</button>
     <button name="button" v-on:click="removeMarkers">Remove Markers</button>
+    <button name="button" v-on:click="requestTestData">Request Data</button>
   </div>
 </el-row>
-
 </template>
 
+<script src="js/vue.js"></script>
+<script src="js/vue-resource.js"></script>
 <script>
-// import Vue from 'vue'
+import Vue from 'vue'
+import VueResource from 'vue-resource'
 import Vue2Leaflet from 'vue2-leaflet'
+Vue.use(VueResource);
 
 // [34.259464, 108.946982]
 // L.latLng(31.2304, 121.4737),
@@ -47,7 +49,11 @@ export default {
         {id: 'm2', position: {lat: 34.27, lng: 108.95}, draggable: true, visible: true},
         {id: 'm3', position: {lat: 34.25, lng: 108.94}, draggable: true, visible: true},
         {id: 'm4', position: {lat: 34.26, lng: 108.84}, draggable: true, visible: true}
-      ]
+      ],
+      http: {
+        emulateJSON: true,
+        emulateHTTP: true
+      }
     }
   },
   methods: {
@@ -67,6 +73,28 @@ export default {
         {id: 'm3', position: {lat: 34.25, lng: 108.94}, draggable: true, visible: true},
         {id: 'm4', position: {lat: 34.26, lng: 108.84}, draggable: true, visible: true}
       ]
+    },
+    requestTestData: function () {
+      // GET /someUrl
+      Vue.http.get('http://localhost:2020/api/testdata/').then(response => {
+        console.log('result....')
+        console.log(response)
+        // get body data
+        this.markers = response.body
+      }, response => {
+        // error callback
+      })
+    },
+    testReq: function () {
+      console.log("testReq")
+      this.$http.get('http://localhost:2020/api/testdata/').then(response => {
+        // get body data
+        // this.markers = response.body
+        // https://jsonplaceholder.typicode.com/posts
+      }, response => {
+        // error callback
+        console.log("error")
+      })
     }
   }
 }
