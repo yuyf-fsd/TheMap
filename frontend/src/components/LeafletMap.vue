@@ -14,7 +14,7 @@
   <div style="height: 50">
     <button name="button" v-on:click="addMarkers">Add Markers</button>
     <button name="button" v-on:click="removeMarkers">Remove Markers</button>
-    <button name="button" v-on:click="requestTestData">Request Data</button>
+    <button name="button" v-on:click="requestTestString">Request Data</button>
   </div>
 </el-row>
 </template>
@@ -50,10 +50,6 @@ export default {
         {id: 'm3', position: {lat: 34.25, lng: 108.94}, draggable: true, visible: true},
         {id: 'm4', position: {lat: 34.26, lng: 108.84}, draggable: true, visible: true}
       ],
-      http: {
-        emulateJSON: true,
-        emulateHTTP: true
-      }
     }
   },
   methods: {
@@ -79,21 +75,18 @@ export default {
       Vue.http.get('http://localhost:2020/api/testdata/').then(response => {
         console.log('result....')
         console.log(response)
-        // get body data
         this.markers = response.body
       }, response => {
         // error callback
       })
     },
-    testReq: function () {
-      console.log("testReq")
-      this.$http.get('http://localhost:2020/api/testdata/').then(response => {
+    requestTestString: function () {
+      // GET /someUrl
+      Vue.http.get('http://localhost:2020/api/teststring/').then(response => {
+        console.log(response)
         // get body data
-        // this.markers = response.body
-        // https://jsonplaceholder.typicode.com/posts
       }, response => {
         // error callback
-        console.log("error")
       })
     }
   }
